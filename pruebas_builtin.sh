@@ -1,69 +1,36 @@
 #!/bin/bash
-# Script de pruebas para documentar funcionalidad de wish shell
+
+set -u
+
+PROJECT_DIR="/mnt/c/Users/carlo/OneDrive/Documentos/GitHub/Lab02_-SistemasOperativos"
+
+run_case() {
+	local title="$1"
+	local input="$2"
+
+	echo ""
+	echo "===================================================="
+	echo "$title"
+	echo "===================================================="
+	printf "%b" "$input" | ./wish
+}
 
 echo "╔════════════════════════════════════════════════════════╗"
 echo "║     PRUEBAS DE COMANDOS BUILT-IN - WISH SHELL        ║"
 echo "╚════════════════════════════════════════════════════════╝"
 
-cd /mnt/c/Users/carlo/OneDrive/Documentos/GitHub/Lab02_-SistemasOperativos
+cd "$PROJECT_DIR" || exit 1
+
+run_case "[PRUEBA 1] exit sin argumentos" "exit\n"
+run_case "[PRUEBA 2] exit con argumentos (error)" "exit 1\n"
+run_case "[PRUEBA 3] cd correcto y verificación con pwd" "pwd\ncd /tmp\npwd\nexit\n"
+run_case "[PRUEBA 4] cd sin argumentos (error)" "cd\nexit\n"
+run_case "[PRUEBA 5] cd con múltiples argumentos (error)" "cd /tmp /home\nexit\n"
+run_case "[PRUEBA 6] cd a directorio inexistente (error)" "pwd\ncd /ruta/inexistente\npwd\nexit\n"
+run_case "[PRUEBA 7] path vacío: no ejecuta programas externos" "path\npwd\nexit\n"
+run_case "[PRUEBA 8] path con rutas válidas" "path /bin /usr/bin\nexit\n"
 
 echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "[PRUEBA 1] Comando EXIT - Correcto"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-printf '$ exit\n\n' | ./wish
-echo "✓ Shell cerrado correctamente"
-echo ""
-
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "[PRUEBA 2] Comando EXIT - Error (con argumentos)"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-printf '$ exit 1\n' | ./wish 2>&1 | grep "error"
-echo "✓ Error detectado correctamente"
-echo ""
-
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "[PRUEBA 3] Comando CD - Cambio de directorio correcto"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-printf '$ pwd\n$ cd /tmp\n$ pwd\n$ exit\n' | ./wish
-echo "✓ cd funcionó correctamente"
-echo ""
-
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "[PRUEBA 4] Comando CD - Error (sin argumentos)"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-printf '$ cd\n$ exit\n' | ./wish 2>&1 | grep "error"
-echo "✓ Error detectado correctamente"
-echo ""
-
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "[PRUEBA 5] Comando CD - Error (múltiples argumentos)"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-printf '$ cd /tmp /home\n$ exit\n' | ./wish 2>&1 | grep "error"
-echo "✓ Error detectado correctamente"
-echo ""
-
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "[PRUEBA 6] Comando CD - Error (directorio inexistente)"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-printf '$ cd /no/existe\n$ pwd\n$ exit\n' | ./wish 2>&1
-echo "✓ Directorio actual no cambió"
-echo ""
-
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "[PRUEBA 7] Comando PATH - Vacío (sin comandos)"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-printf '$ path\n$ pwd\n$ exit\n' | ./wish 2>&1
-echo "✓ pwd no funciona cuando PATH está vacío"
-echo ""
-
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "[PRUEBA 8] Comando PATH - Establecer nuevas rutas"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-printf '$ path /bin /usr/bin\n$ exit\n' | ./wish
-echo "✓ PATH establecido correctamente"
-echo ""
-
 echo "╔════════════════════════════════════════════════════════╗"
 echo "║          TODAS LAS PRUEBAS COMPLETADAS ✓              ║"
 echo "╚════════════════════════════════════════════════════════╝"
