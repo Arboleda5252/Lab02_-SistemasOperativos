@@ -8,14 +8,129 @@ Elaborado por:
 Link de video: 
 
 ## Introducción
-En este laboratorio se desarrolló un intérprete de comandos básico para Linux, siendo similar a un shell, con el propósito de comprender el funcionamiento de la API de procesos en sistemas operativos. Se trabajó con varios aspectos como la creación de procesos, el manejo de comandos internos, la búsqueda de ejecutables mediante rutas y la redirección de salida.
-
+En este laboratorio se implementa un shell básico (`wish`) que funciona como un intérprete de comandos simple. El shell puede ejecutarse tanto en modo interactivo como en modo batch (leyendo comandos desde un archivo).
 
 ## Objetivo
-Implementar un shell que permita aplicar los conceptos fundamentales de gestión de procesos y uso de llamadas al sistema en Linux.
+Implementar un shell que:
+- Lee comandos del usuario (modo interactivo) o desde un archivo (modo batch)
+- Ejecuta programas externos usando `fork()` y `execv()`
+- Implementa comandos built-in: `exit`, `cd` y `path`
+- Maneja errores adecuadamente
 
+## Compilación
 
-## Desarrollo 
+### En Linux/Unix directamente:
+```bash
+gcc -Wall -o wish wish.c
+```
+
+### En Windows (usando WSL):
+```bash
+wsl bash -c "cd /ruta/al/proyecto && gcc -Wall -o wish wish.c"
+```
+
+## Ejecución
+### Modo interactivo:
+```bash
+./wish
+wish> pwd
+wish> cd /tmp
+wish> exit
+```
+
+### Modo batch (desde archivo):
+```bash
+./wish comandos.txt
+```
+
+Donde `test_commands.txt` contiene los comandos a ejecutar, uno por línea.
+
+## Desarrollo
 ### Creación inicial del shell wish
 Para cumplir con este paso se creó inicialmente un archivo wish.c, y se compiló para generar el ejecutable con el nombre wish. La compilación se realizó con el compilador gcc de forma que pudiera ejecutarse desde terminal con el comando ./wish. 
 
+### Shell básico
+En este paso se desarrolló la estructura básica del shell wish. Se implementó getline() para leer una línea de entrada
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    char *line = NULL;
+    size_t len = 0;
+
+    // Bucle infinito - leer comandos
+    while (1) {
+        printf("wish> ");
+        fflush(stdout);
+
+        // Leer línea de entrada
+        if (getline(&line, &len, stdin) == -1) {
+            break;
+        }
+
+        printf("    %s", line);
+    }
+
+    free(line);
+    return 0;
+}
+```
+
+Se implementó la función strsep(), lo que permite separar el comando de sus argumentos utilizando los espacios como delimitadores. Y Se realizó una impresión de prueba para verificar que tanto el comando como los argumentos se reconocen correctamente de forma independiente.
+
+![texto](img/3.png)
+
+Ejemplo:
+```bash
+gcc -o wish wish.c
+./wish
+wish> ls
+ls
+```
+
+Implementación de fork(), execv() y waitpid: 
+- Implementación de Fork(): Se crea un proceso hijo copiando el proceso actual, por lo cual existen dos procesos: el padre y el hijo.
+- Implementación de execv(): Sirve para reemplazar el código del proceso actual por otro programa. Ya que el hijo existe gracias a fork(), entonces el hijo hace execv y entonces el hijo deja de ser “shell” y se convierte en el programa (comando colocado)
+- Implementación de wait() / waitpid(): Sirven para que el proceso padre espere a que termine el hijo. Después de terminar, vuelve a mostrar wish
+
+![texto](img/4.png)
+
+En conclusion se creó un proceso hijo mediante fork(). Luego, el hijo ejecutó el comando usando execv(), mientras que el proceso padre esperó su finalización mediante waitpid(). Con esta implementación se permitió ver el comportamiento básico descrito para un shell.
+
+### Paths
+Se construyó la ruta completa del ejecutable a partir del nombre del comando ingresado, si el comando es ls, la ruta generada es /bin/ls
+
+![texto](img/5.png)
+
+Ejemplos:
+
+Implementación de ls
+```bash
+./wish
+wish> ls
+README.md  wish  wish.c
+```
+Ejecución con comandos
+```bash
+wish> ls -l
+total 24
+-rwxrwxrwx 1 dkali dkali   258 Apr  9 19:23 README.md
+-rwxrwxrwx 1 dkali dkali 16496 Apr 10 01:24 wish
+-rwxrwxrwx 1 dkali dkali  2010 Apr 10 01:23 wish.c
+```
+
+### Validaciones de error
+Todos los errores se reportan con: `An error has occurred\n`
+
+Casos que generan errores:
+- Comando no existente
+- Argumentos inválidos para built-ins
+- Problemas al cambiar directorio
+- Fallos en fork() o execv()
+
+![texto](img/6.png)
+
+## Conclusión
+Durante el desarrollo de este laboratorio se logro implementar de manera práctica los conceptos fundamentales 'API de procesos' en Linux mediante la implementación de un shell básico,  (wish), por medio de comandos internos, ejecución de procesos, redirección y paralelismo. Se fortaleció la comprensión del funcionamiento del sistema operativo y de la interacción entre el usuario con el sistema.
