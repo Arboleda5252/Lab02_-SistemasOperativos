@@ -57,8 +57,14 @@ int main() {
         args[argc] = NULL;
 
         // Ruta temporal del ejecutable en /bin
-        char ruta[200];
-        snprintf(ruta, sizeof(ruta), "/bin/%s", args[0]);
+        for (int i = 0; i < num_paths; i++) {
+            snprintf(ruta, sizeof(ruta), "%s/%s", paths[i], args[0]);
+            // Access()
+            if (access(ruta, X_OK) == 0) {
+                encontrado = 1;
+                break;
+        }
+}
 
         // fork(): crear proceso hijo
         pid_t pid = fork();
