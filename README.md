@@ -153,9 +153,26 @@ Prueba: Podemos ver que todos funcionan correctamente. Y al dar exit cierra la t
 ![texto](img/8.png)
 
 ### Pruebas de redirección 
+Se implementó la redirección de salida del shell mediante el operador >. Esta funcionalidad permite que la salida de un comando externo sea almacenada en un archivo en lugar de mostrarse en pantalla. 
 
+![texto](img/9.png)
 
-### Parallel Commands
+![texto](img/10.png)
+
+Pruebas automatizadas para verificar la redirección:
+
+![texto](img/11.png)
+
+### Comandos en Paralelo
+Vamos con la implementación de la ejecución de varios comandos en una misma línea usando el operador &, de manera que el shell los lance en paralelo, el shell debe permitir entradas como:
+
+```bash
+cmd1 & cmd2 args1 args2 & cmd3 args1
+```
+
+Pruebas automatizadas para verificar los comandos en paralelo:
+
+![texto](img/12.png)
 
 ### Validaciones de error
 Todos los errores se reportan con: `An error has occurred\n`
