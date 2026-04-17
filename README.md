@@ -102,7 +102,7 @@ En conclusion se creó un proceso hijo mediante fork(). Luego, el hijo ejecutó 
 ### Paths
 Se construyó la ruta completa del ejecutable a partir del nombre del comando ingresado, si el comando es ls, la ruta generada es /bin/ls
 
-![texto](img/5.png)
+![texto](img/55.png)
 
 Ejemplos:
 
@@ -120,6 +120,59 @@ total 24
 -rwxrwxrwx 1 dkali dkali 16496 Apr 10 01:24 wish
 -rwxrwxrwx 1 dkali dkali  2010 Apr 10 01:23 wish.c
 ```
+
+Tambien se implementó la llamada access(ruta, X_OK) con el fin de verificar si el archivo correspondiente al comando existe en la ruta construida, de este modo antes de crear el proceso con fork(), el shell valida que el ejecutable sea accesible.
+
+### Comandos Built-in
+En esta parte se implementó los siguientes comandos internos del shell:
+- exit para finalizar el shell, es decir, finaliza correctamente con exit(0).
+- cd para cambiar el directorio actual del shell con el uso de llamado chdir(), verificando que reciba exactamente un argumento correspondiente al directorio destino.
+- path para administrar la ruta de búsqueda de ejecutables del shell.
+
+#### Implementación:
+
+- **`exit`**: Finaliza el shell. No acepta argumentos.
+  - ✓ `exit` → Cierra el shell
+  - ✗ `exit 1` → Error
+
+- **`cd <directorio>`**: Cambia de directorio. Requiere exactamente 1 argumento.
+  - ✓ `cd /tmp` → Funciona
+  - ✗ `cd` → Error (sin argumentos)
+  - ✗ `cd /tmp /home` → Error (múltiples argumentos)
+  - ✗ `cd /inexistente` → Error (directorio no existe)
+
+- **`path <dir1> <dir2> ...`**: Establece la ruta de búsqueda del shell. Puede tomar 0 o más argumentos.
+  - ✓ `path /bin /usr/bin` → Establece PATH
+  - ✓ `path` → Borra PATH (no se pueden ejecutar programas)
+  - Nota: Sobrescribe el PATH anterior
+
+![texto](img/7.png)
+
+Prueba: Podemos ver que todos funcionan correctamente. Y al dar exit cierra la terminal correctamente 
+
+![texto](img/8.png)
+
+### Pruebas de redirección 
+Se implementó la redirección de salida del shell mediante el operador >. Esta funcionalidad permite que la salida de un comando externo sea almacenada en un archivo en lugar de mostrarse en pantalla. 
+
+![texto](img/9.png)
+
+![texto](img/10.png)
+
+Pruebas automatizadas para verificar la redirección:
+
+![texto](img/11.png)
+
+### Comandos en Paralelo
+Vamos con la implementación de la ejecución de varios comandos en una misma línea usando el operador &, de manera que el shell los lance en paralelo, el shell debe permitir entradas como:
+
+```bash
+cmd1 & cmd2 args1 args2 & cmd3 args1
+```
+
+Pruebas automatizadas para verificar los comandos en paralelo:
+
+![texto](img/12.png)
 
 ### Validaciones de error
 Todos los errores se reportan con: `An error has occurred\n`
