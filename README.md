@@ -5,7 +5,7 @@ Elaborado por:
 - Duván Antonio Arboleda Botero
   duvan.arboleda1@udea.edu.co
 
-Link de video: 
+Link de video: https://www.youtube.com/watch?v=_y5xPk49RNc 
 
 ## Introducción
 En este laboratorio se implementa un shell básico (`wish`) que funciona como un intérprete de comandos simple. El shell puede ejecutarse tanto en modo interactivo como en modo batch (leyendo comandos desde un archivo).
@@ -147,18 +147,16 @@ En esta parte se implementó los siguientes comandos internos del shell:
 
 Prueba: Podemos ver que todos funcionan correctamente. Y al dar exit cierra la terminal correctamente 
 
-![texto](img/8.png)
+![texto](img/13.png)
 
 ### Pruebas de redirección 
 Se implementó la redirección de salida del shell mediante el operador >. Esta funcionalidad permite que la salida de un comando externo sea almacenada en un archivo en lugar de mostrarse en pantalla. 
 
 ![texto](img/9.png)
 
-![texto](img/10.png)
-
 Pruebas automatizadas para verificar la redirección:
 
-![texto](img/11.png)
+![texto](img/111.png)
 
 ### Comandos en Paralelo
 Vamos con la implementación de la ejecución de varios comandos en una misma línea usando el operador &, de manera que el shell los lance en paralelo, el shell debe permitir entradas como:
