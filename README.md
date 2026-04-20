@@ -7,6 +7,7 @@ Elaborado por:
 
 Link de video: https://www.youtube.com/watch?v=_y5xPk49RNc 
 
+Link de informe en pdf: https://drive.google.com/file/d/1L1P2S25usq1dPNzrxPPkvaS8npLElL1A/view?usp=sharing 
 ## Introducción
 En este laboratorio se implementa un shell básico (`wish`) que funciona como un intérprete de comandos simple. El shell puede ejecutarse tanto en modo interactivo como en modo batch (leyendo comandos desde un archivo).
 
