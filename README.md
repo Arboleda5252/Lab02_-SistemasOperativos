@@ -30,6 +30,8 @@ wsl bash -c "cd /ruta/al/proyecto && gcc -Wall -o wish wish.c"
 ```
 
 ## Ejecución
+El shell se puede probar en modo interactivo con ./wish, donde el usuario escribe comandos manualmente, o también desde el modo batch donde el programa lee y ejecuta automáticamente las instrucciones guardadas en un archivo.
+
 ### Modo interactivo:
 ```bash
 ./wish
@@ -50,7 +52,7 @@ Donde `test_commands.txt` contiene los comandos a ejecutar, uno por línea.
 Para cumplir con este paso se creó inicialmente un archivo wish.c, y se compiló para generar el ejecutable con el nombre wish. La compilación se realizó con el compilador gcc de forma que pudiera ejecutarse desde terminal con el comando ./wish. 
 
 ### Shell básico
-En este paso se desarrolló la estructura básica del shell wish. Se implementó getline() para leer una línea de entrada
+En este paso se desarrolló la estructura básica del shell wish. El shell fue construido en un ciclo infinito para que nunca termine por sí solo, sino que continúe pidiendo comandos una y otra vez. Se implementó getline() para leer una línea de entrada con capturar el comando completo, incluyendo sus argumentos. Si getline() devuelve -1, significa que se alcanzó el fin del archivo, es decir, un EOF. 
 
 ```c
 #include <stdio.h>
@@ -125,17 +127,12 @@ Tambien se implementó la llamada access(ruta, X_OK) con el fin de verificar si 
 
 ### Comandos Built-in
 En esta parte se implementó los siguientes comandos internos del shell:
-- exit para finalizar el shell, es decir, finaliza correctamente con exit(0).
-- cd para cambiar el directorio actual del shell con el uso de llamado chdir(), verificando que reciba exactamente un argumento correspondiente al directorio destino.
-- path para administrar la ruta de búsqueda de ejecutables del shell.
 
-#### Implementación:
-
-- **`exit`**: Finaliza el shell. No acepta argumentos.
+- **`exit`**: Para finalizar el shell, es decir, finaliza correctamente con exit(0).
   - ✓ `exit` → Cierra el shell
   - ✗ `exit 1` → Error
 
-- **`cd <directorio>`**: Cambia de directorio. Requiere exactamente 1 argumento.
+- **`cd <directorio>`**: Para cambiar el directorio actual del shell con el uso de llamado chdir(), verificando que reciba exactamente un argumento correspondiente al directorio destino. Requiere un argumento
   - ✓ `cd /tmp` → Funciona
   - ✗ `cd` → Error (sin argumentos)
   - ✗ `cd /tmp /home` → Error (múltiples argumentos)
